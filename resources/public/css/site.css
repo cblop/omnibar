@@ -32,3 +32,17 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+cirle {
+    stroke: #00f;
+    stroke-width: 2;
+    fill: #E30000;
+    pointer-events: all;
+}
+
+cirle:hover {
+    stroke: #00f;
+    stroke-width: 3;
+    fill: #E38;
+    pointer-events: all;
+}

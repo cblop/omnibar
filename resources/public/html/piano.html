@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Keyboard layouts</title>
+    <style>
+     .keyboard { outline: 2px solid black; background-color:#333; }
+     .white-key { fill: #fff;
+	 stroke: #000;
+	 stroke-width: 1px;
+     }
+     .white-key:hover { fill: #eee;
+	 stroke: #444;
+	 stroke-width: 3px; }
+
+     .black-key { fill: #000;
+	    stroke: #000;
+	    stroke-width: 1px; }
+     .black-key:hover { fill: #222;
+	    stroke: #444;
+	 stroke-width: 3px; }
+     
+     .tile polygon {
+         pointer-events: visiblePainted;
+         fill: hsl(60, 10%, 95%);
+         stroke: hsl(0, 0%, 70%);
+         stroke-width: 0.5;
+     }
+
+     .tile text {
+         font-family: "Droid Sans";
+
+     }
+
+    </style>
+  </head>
+  <body>
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg"
+           height="130"
+           width="100%"
+           viewBox="0 0 100% 130"
+           class="keyboard"
+           id="piano-keyboard">
+        <defs>
+          <g id="b-shape">
+	    <path id="b-shape-path" class="white-key" d="M1.183.883v106.15l28.954 16.89 28.955-17.2-.105-35.523-28.745-17.177L30.346.99z" fill-rule="evenodd" />
+	  </g>
+	  <g id="black-key">
+	    <path id="black-key-path" class="black-key" d="M2.09 1.846l.018 53.005 28.967 16.985 29.002-16.987.004-53.005z" fill-rule="evenodd" />
+	  </g>
+	  <g id="hex-key">
+	    <path id="hex-key-path" class="white-key" d="M1.31 53.91l29 17 29.022-17.028-.088-35.853L30.348 1.044l-29.01 17.01c0 17.668-.028 18.187-.028 35.854z" fill-rule="evenodd" />
+	  </g>
+	  <g id="octave">
+	    <use xlink:href="#b-shape" x="1" y="2"/>
+	    <use xlink:href="#b-shape" x="182" y="2"/>
+
+	    <!-- b shape flipped to a d shape -->
+	    <use xlink:href="#b-shape" x="-183" y="2" transform="scale(-1,1)"/>
+	    <use xlink:href="#b-shape" x="-424" y="2" transform="scale(-1,1)"/>
+
+	    <use xlink:href="#hex-key" x="61.5" y="55.5"/>
+	    <use xlink:href="#hex-key" x="242.5" y="55.5"/>
+	    <use xlink:href="#hex-key" x="302.5" y="55.5"/>
+	    
+	    <use xlink:href="#black-key" x="31" y="1"/>
+	    <use xlink:href="#black-key" x="91" y="1"/>
+	    <use xlink:href="#black-key" x="212" y="1"/>
+	    <use xlink:href="#black-key" x="272" y="1"/>
+	    <use xlink:href="#black-key" x="332" y="1"/>
+	  </g>
+	</defs>
+	<use id="octave-1" xlink:href="#octave"/>
+	<use id="octave-2" xlink:href="#octave" x="422"/>
+	<use id="octave-3" xlink:href="#octave" x="843"/>
+	<use id="octave-4" xlink:href="#octave" x="1267"/>
+	<use id="octave-5" xlink:href="#octave" x="1689"/>
+        <use id="octave-6" xlink:href="#octave" x="2111"/>
+        <use id="octave-7" xlink:href="#octave" x="2533"/>
+	<use id="octave-8" xlink:href="#octave" x="2955"/>
+        <use id="octave-9" xlink:href="#octave" x="3377"/>
+      </svg>
+    </div>
+
+    
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg"
+           height="130"
+           width="100%"
+           viewBox="0 0 100% 130"
+           class="keyboard"
+           id="accordian-chords">
+<!--         <g class="tile">
+          <polygon transform="translate(130,108), rotate(-30)"
+                   points="107.500,0.000 53.750,93.098 -53.750,93.098 -107.500,0.000 -53.750,-93.098 53.750,-93.098">
+
+            <text style="text-align:center"
+                  transform="matrix(.01257 0 0 .01045 14.51 4.14)"
+                  font-size="514.38"
+                  y="210.527"
+                  x="-741.094"
+                  font-family="'Droid Sans'"
+                  word-spacing="0"
+                  letter-spacing="0"
+                  text-anchor="middle">
+              <tspan font-size="257.19" y="210.527" x="-741.094">C#/D♭</tspan>
+            </text>
+
+            
+          </polygon>
+        </g>
+        
+        <g>
+          <path d="M-760 532.36l-381.05-220v-440l381.05-220 381.05 220v440z"
+                fill-rule="evenodd"
+                stroke="#00f"
+                stroke-width="50"
+                fill="#00eb00"
+                transform="matrix(.0123 0 0 .01067 14.51 4.14)"
+          />
+
+          <text style="text-align:center"
+                transform="matrix(.01257 0 0 .01045 14.51 4.14)"
+                font-size="514.38"
+                y="210.527"
+                x="-741.094"
+                font-family="'Droid Sans'"
+                word-spacing="0"
+                letter-spacing="0"
+                text-anchor="middle"
+          >
+            <tspan font-size="257.19" y="210.527" x="-741.094">C#/D♭</tspan>
+          </text>
+        </g> -->
+        <g class="tile" transform="translate(40,40)">
+          <polygon transform="rotate(-30),scale(1.6,1.6)"
+                   points="20.000,0.000 10.000,17.321 -10.000,17.321 -20.000,0.000 -10.000,-17.321 10.000,-17.321"></polygon>
+          <text y="0.4em"
+                transform="scale(1)"
+                text-anchor="middle"
+          >C#/D♭</tspan></text>
+        </g>
+      </svg>
+
+    </div>
+    <div>
+      <ul>
+        <li>Zoom out to see a nine octave keyboard</li>
+        <li>Roll over notes for :hover effect (Firefox, but not Chrome!)</li>
+        <li>It's not going to win any design awards, but we can generate a keyboard and it's a start.</li>
+        <li>
+          The keyboard uses &lt;defs&gt; and &lt;use&gt; to display the repeated pattern of a piano keyboard. This keeps the html content small.
+        </li>
+        <li>
+          However, &lt;use&gt; is not as flexible for styling as we may need. See <a href="https://sarasoueidan.com/blog/structuring-grouping-referencing-in-svg/">Structuring, Grouping, and Referencing in SVG</a>.
+        </li>
+        <li>
+          Also hiccup may have trouble translating  &lt;use xlink:href="#key"&gt; - I have failed to find the correct syntax.
+        </li>
+        <li>Conclusion: Don't use &lt;use&gt;</li>
+      </ul>
+    </div>
+  </body>
+</html>
