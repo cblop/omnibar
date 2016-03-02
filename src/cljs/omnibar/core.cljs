@@ -3,12 +3,24 @@
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
+              [hum.core :as hum]
               [omnibar.accordion :as accord]))
 
 ;; -------------------------
 ;; svg
 
 
+(def ctx (hum/create-context))
+(def vco (hum/create-osc ctx :sawtooth))
+(def vcf (hum/create-biquad-filter ctx))
+(def output (hum/create-gain ctx))
+
+                                        ; connect the VCO to the VCF and on to the output gain node
+(hum/connect vco vcf output)
+
+(hum/start-osc vco)
+
+(hum/connect-output output)
 
 
 (defn inkscape-hexagon [[x y]]
@@ -110,6 +122,8 @@
      shape 
      [:text {:y "0.4em"
              :transform "scale(.95)"
+             :on-mouse-down #(hum/note-on output vco 440)
+             :on-mouse-up #(hum/note-off output)
              :text-anchor "middle"}
       title]]))
 

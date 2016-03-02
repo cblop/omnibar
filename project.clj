@@ -14,6 +14,7 @@
                  [ring/ring-defaults "0.1.5"]
                  [compojure "1.4.0"]
                  [hiccup "1.0.5"]
+                 [hum "0.4.0"]
                  [environ "1.0.1"]
                  [org.clojure/clojurescript "1.7.228" :scope "provided"]
                  [secretary "1.2.3"]
