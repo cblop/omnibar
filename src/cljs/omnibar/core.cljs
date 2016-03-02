@@ -15,6 +15,14 @@
 (def vcf (hum/create-biquad-filter ctx))
 (def output (hum/create-gain ctx))
 
+
+(defn midi-to-freq [note-num]
+  (let [expt-numerator (- note-num 49)
+        expt-denominator 12
+        expt (/ expt-numerator expt-denominator)
+        multiplier (.pow js/Math 2 expt)
+        a 440]
+    (* multiplier a)))
                                         ; connect the VCO to the VCF and on to the output gain node
 (hum/connect vco vcf output)
 
@@ -100,30 +108,37 @@
 ;; All the points to make up a polygon
 (def hexagon-points "20.000,0.000 10.000,17.321 -10.000,17.321 -20.000,0.000 -10.000,-17.321 10.000,-17.321")
 
-(def hexagon
-  [:polygon {:transform "rotate(-30),scale(1.6,1.6)"
+(defn hexagon [freq]
+  [:polygon {:on-mouse-down #(hum/note-on output vco freq)
+             :on-mouse-up #(hum/note-off output)
+             :transform "rotate(-30),scale(1.6,1.6)"
              :fill "hsl(20, 10%, 95%)"
              :stroke "hsl(0, 0%, 70%)"
              :stroke-width "0.5" 
              :points hexagon-points}] )
 
-(def circle
-  [:circle {:r "27" :stroke "black" :stroke-width "1" :fill "red"}] )
+(defn circle [freq]
+  [:circle {
+            :on-mouse-down #(hum/note-on output vco freq)
+            :on-mouse-up #(hum/note-off output)
+            :r "27" :stroke "black" :stroke-width "1" :fill "red"}] )
+
 
 (defn accordion-keyboard [shape note]
   (let [[x y] (:position note)
         title (:text note)
+        freq (midi-to-freq (first (:midi note)))
         y-start-pos 33
         x-start-pos 33
         hx   (+ y-start-pos (* x 48))
         hy   (+ x-start-pos (* x 27) (* y 55))]
 
     [:g {:class "tile" :transform (str "translate(" hy "," hx ")")}
-     shape 
+     (if (= shape "circle") (circle freq) (hexagon freq))
      [:text {:y "0.4em"
-             :transform "scale(.95)"
-             :on-mouse-down #(hum/note-on output vco 440)
+             :on-mouse-down #(hum/note-on output vco freq)
              :on-mouse-up #(hum/note-off output)
+             :transform "scale(.95)"
              :text-anchor "middle"}
       title]]))
 
@@ -157,8 +172,8 @@
    [:div [:a {:href "/about"} "go to about page"]]
    [:div
     [svg-piano-keyboard 150 800]
-    [svg-accordion [320 1250] hexagon]
-    [svg-accordion [320 1250] circle]
+    [svg-accordion [320 1250] "hexagon"]
+    [svg-accordion [320 1250] "circle"]
     [svg-inkscape-hexagons 250 500]]    ])
 
 (defn about-page []
