@@ -1,20 +1,41 @@
 (ns omnibar.core
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]])
     (:require [reagent.core :as reagent :refer [atom]]
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
               [hum.core :as hum]
+              [cljs.core.async :refer [put! chan <!]]
               [omnibar.accordion :as accord]))
 
 ;; -------------------------
-;; svg
+;; async
 
+(def note-chan (chan))
+
+;; -------------------------
+;; audio
 
 (def ctx (hum/create-context))
-(def vco (hum/create-osc ctx :sawtooth))
-(def vcf (hum/create-biquad-filter ctx))
-(def output (hum/create-gain ctx))
 
+(defn play-note! [freq]
+  (let [context ctx
+        vco (hum/create-osc ctx :sawtooth)
+        vcf (hum/create-biquad-filter context)
+        output (hum/create-gain context)]
+    (do (hum/connect vco vcf output)
+        (hum/start-osc vco)
+        (hum/connect-output output)
+        (hum/note-on output vco freq)
+        (go-loop [] (let [input (<! note-chan)]
+              (if (= input :stop) (hum/note-off output) (recur))))
+        )))
+
+(defn play-chord! [chord]
+  (doseq [f chord] (play-note! f)))
+
+(defn stop-chord! [chord]
+  (doseq [f chord] (put! note-chan :stop)))
 
 (defn midi-to-freq [note-num]
   (let [expt-numerator (- note-num 49)
@@ -23,13 +44,9 @@
         multiplier (.pow js/Math 2 expt)
         a 440]
     (* multiplier a)))
-                                        ; connect the VCO to the VCF and on to the output gain node
-(hum/connect vco vcf output)
 
-(hum/start-osc vco)
-
-(hum/connect-output output)
-
+;; -------------------------
+;; svg
 
 (defn inkscape-hexagon [[x y]]
   (let [hx (if (even? y)
@@ -108,36 +125,36 @@
 ;; All the points to make up a polygon
 (def hexagon-points "20.000,0.000 10.000,17.321 -10.000,17.321 -20.000,0.000 -10.000,-17.321 10.000,-17.321")
 
-(defn hexagon [freq]
-  [:polygon {:on-mouse-down #(hum/note-on output vco freq)
-             :on-mouse-up #(hum/note-off output)
+(defn hexagon [chord]
+  [:polygon {:on-mouse-down #(play-chord! chord)
+             :on-mouse-up #(stop-chord! chord)
              :transform "rotate(-30),scale(1.6,1.6)"
              :fill "hsl(20, 10%, 95%)"
              :stroke "hsl(0, 0%, 70%)"
              :stroke-width "0.5" 
              :points hexagon-points}] )
 
-(defn circle [freq]
+(defn circle [chord]
   [:circle {
-            :on-mouse-down #(hum/note-on output vco freq)
-            :on-mouse-up #(hum/note-off output)
+            :on-mouse-down #(play-chord! chord)
+            :on-mouse-up #(stop-chord! chord)
             :r "27" :stroke "black" :stroke-width "1" :fill "red"}] )
 
 
 (defn accordion-keyboard [shape note]
   (let [[x y] (:position note)
         title (:text note)
-        freq (midi-to-freq (first (:midi note)))
+        freqs (map midi-to-freq (:midi note))
         y-start-pos 33
         x-start-pos 33
         hx   (+ y-start-pos (* x 48))
         hy   (+ x-start-pos (* x 27) (* y 55))]
 
     [:g {:class "tile" :transform (str "translate(" hy "," hx ")")}
-     (if (= shape "circle") (circle freq) (hexagon freq))
+     (if (= shape "circle") (circle freqs) (hexagon freqs))
      [:text {:y "0.4em"
-             :on-mouse-down #(hum/note-on output vco freq)
-             :on-mouse-up #(hum/note-off output)
+             :on-mouse-down #(play-chord! freqs)
+             :on-mouse-up #(stop-chord! freqs)
              :transform "scale(.95)"
              :text-anchor "middle"}
       title]]))

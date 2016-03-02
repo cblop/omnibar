@@ -12,6 +12,7 @@
                  [reagent-utils "0.1.7"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
+                 [org.clojure/core.async "0.2.374"]
                  [compojure "1.4.0"]
                  [hiccup "1.0.5"]
                  [hum "0.4.0"]
