@@ -64,6 +64,44 @@
          :fill "#00eb00"
          }]]))
 
+;;(defn b-key-points [[x y]] (str "m" x  "m1.183.883v106.15l28.954 16.89 28.955-17.2-.105-35.523-28.745-17.177L30.346.99z"))
+(def b-key-points "M1.183.883v106.15l28.954 16.89 28.955-17.2-.105-35.523-28.745-17.177L30.346.99z")
+(def black-key-points "M2.09 1.846l.018 53.005 28.967 16.985 29.002-16.987.004-53.005z")
+
+;; try to replace this with hexagon-points defined later.
+(def hex-key-points "M1.31 53.91l29 17 29.022-17.028-.088-35.853L30.348 1.044l-29.01 17.01c0 17.668-.028 18.187-.028 35.854z")
+
+(def white-key-style
+  {:fill-rule "evenodd"
+   :stroke "#000"
+   :stroke-width "1px"
+   :fill "#fff"} )
+
+(def black-key-style
+  {:fill-rule "evenodd"
+   :stroke "#fff"
+   :stroke-width "1px"
+   :fill "#000"} )
+
+
+(defn piano-key [id style [x y] key-shape-points]
+  [:g {:id id :transform (str "translate(" x "," y ")")}
+   [:path {:id id :style style :d key-shape-points}]])
+
+(defn b-key [id pos]
+  (piano-key id white-key-style pos b-key-points))
+
+(defn black-key [id pos]
+  (piano-key id black-key-style pos black-key-points))
+
+(defn d-key [id [x y]]
+  [:g {:transform "scale(-1,1)"}
+   (piano-key id white-key-style [(- x) y] b-key-points)])
+
+(defn hex-key [id  pos]
+  (piano-key id white-key-style pos hex-key-points))
+
+
 (defn piano-key-b-shape
   "As an example, this is the shape used by middle c"
   [[x y] flip]
@@ -106,20 +144,48 @@
    ;; this may reduce the amount of code sent to the client
    (map #(inkscape-hexagon %) (grid 9 5))])
 
+
+(defn octave [[x y]]
+  (let [octave-n (inc x)] 
+    [:g {:id (str "octave-" octave-n) :transform (str "translate(" (* x 402) "," y ")")}
+     ;; Could this be done in a more idomatic way? Maybe protocols
+     (b-key     (str "C" octave-n)     [1 1])
+     (black-key (str "C#" octave-n)   [29 0])
+     (hex-key   (str "D" octave-n)   [58 54])
+     (black-key (str "D#" octave-n)   [86 0])
+     (d-key     (str "E" octave-n)   [176 1])
+     (b-key     (str "F" octave-n)   [173 1])
+     (black-key (str "F#" octave-n)  [200 0])
+     (hex-key   (str "G" octave-n)  [230 54])
+     (black-key (str "G#" octave-n)  [258 0])
+     (hex-key   (str "A" octave-n)  [288 54])
+     (black-key (str "A#" octave-n)  [316 0])
+     (d-key     (str "B" octave-n)   [406 1])]))
+
 (defn svg-piano-keyboard [h w]
   [:svg {:width w
          :height h
          :id "piano"
    :style {:outline "2px solid black"
            :background-color "#eee"}}
-   (defs-piano-key-b-shape)
-   [:use {:xlink/href "#keybshape" :x 100 :y 10}]
+   ;; TODO add A0 A0# B0 and C8
+   ;; Build a range of octaves
+   (for [x (range 8)]
+     (octave [x 0]))])
 
-   (piano-key-b-shape [40 60] 1)
-   (piano-key-b-shape [-200 60] -1)
-   (piano-key-b-shape [200 60] 1)
-   (piano-key-b-shape [-400 60] -1)
-   ])
+(defn svg-piano-keyboard2 [h w]
+  [:svg {:width w
+         :height h
+         :id "piano"
+   :style {:outline "2px solid black"
+           :background-color "#eee"}}
+   ;; TODO add A0 A0# B0 and C8
+   
+   ;; Build a range of octaves
+   [:g {:id id :transform "translate(2000,150), rotate(180 0 0)"}
+    (for [x (range 8)]
+      (octave [x 0]))]])
+
 
 
 ;; All the points to make up a polygon
@@ -188,10 +254,13 @@
    [:h2 "Welcome to omnibar"]
    [:div [:a {:href "/about"} "go to about page"]]
    [:div
-    [svg-piano-keyboard 150 800]
+    [svg-piano-keyboard2 150 2000]
+
     [svg-accordion [320 1250] "hexagon"]
     [svg-accordion [320 1250] "circle"]
-    [svg-inkscape-hexagons 250 500]]    ])
+    [svg-piano-keyboard 150 2000]
+    ;;[svg-inkscape-hexagons 250 500]
+    ]])
 
 (defn about-page []
   [:div [:h2 "About omnibar"]
