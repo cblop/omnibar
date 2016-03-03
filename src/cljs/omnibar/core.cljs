@@ -21,7 +21,7 @@
 
 (defn play-note! [freq]
   (let [context ctx
-        vco (hum/create-osc ctx :sawtooth)
+        vco (hum/create-osc ctx :square)
         vcf (hum/create-biquad-filter context)
         output (hum/create-gain context)]
     (do (hum/connect vco vcf output)
