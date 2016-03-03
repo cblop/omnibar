@@ -6,7 +6,8 @@
               [accountant.core :as accountant]
               [hum.core :as hum]
               [cljs.core.async :refer [put! chan <!]]
-              [omnibar.accordion :as accord]))
+              [omnibar.accordion :as accord]
+              [omnibar.notes :as piano-notes]))
 
 ;; -------------------------
 ;; async
@@ -44,6 +45,19 @@
         multiplier (.pow js/Math 2 expt)
         a 440]
     (* multiplier a)))
+
+(defn note->midi [notename]
+  (get piano-notes/notes (keyword notename)))
+
+(defn play-piano-chord! [notename]
+  (play-chord! [(-> notename
+                    note->midi
+                    midi-to-freq)]))
+
+(defn stop-piano-chord! [notename]
+  (stop-chord! [(-> notename
+                    note->midi
+                    midi-to-freq)]))
 
 ;; -------------------------
 ;; svg
@@ -86,7 +100,10 @@
 
 (defn piano-key [id style [x y] key-shape-points]
   [:g {:id id :transform (str "translate(" x "," y ")")}
-   [:path {:id id :style style :d key-shape-points}]])
+   [:path {:id id
+           :on-mouse-down #(play-piano-chord! id)
+           :on-mouse-up #(stop-piano-chord! id)
+           :style style :d key-shape-points}]])
 
 (defn b-key [id pos]
   (piano-key id white-key-style pos b-key-points))
