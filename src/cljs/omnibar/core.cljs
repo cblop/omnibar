@@ -7,7 +7,7 @@
               [hum.core :as hum]
               [cljs.core.async :refer [put! chan <!]]
               [omnibar.accordion :as accord]
-              [omnibar.notes :as piano-notes]))
+              [omnibar.notes :as notes]))
 
 ;; -------------------------
 ;; async
@@ -38,26 +38,13 @@
 (defn stop-chord! [chord]
   (doseq [f chord] (put! note-chan :stop)))
 
-(defn midi-to-freq [note-num]
-  (let [expt-numerator (- note-num 49)
-        expt-denominator 12
-        expt (/ expt-numerator expt-denominator)
-        multiplier (.pow js/Math 2 expt)
-        a 440]
-    (* multiplier a)))
-
-(defn note->midi [notename]
-  (get piano-notes/notes (keyword notename)))
-
 (defn play-piano-chord! [notename]
   (play-chord! [(-> notename
-                    note->midi
-                    midi-to-freq)]))
+                    notes/note->freq)]))
 
 (defn stop-piano-chord! [notename]
   (stop-chord! [(-> notename
-                    note->midi
-                    midi-to-freq)]))
+                    notes/note->freq)]))
 
 ;; -------------------------
 ;; svg
@@ -227,7 +214,7 @@
 (defn accordion-keyboard [shape note]
   (let [[x y] (:position note)
         title (:text note)
-        freqs (map midi-to-freq (:midi note))
+        freqs (map notes/midi->freq (:midi note))
         y-start-pos 33
         x-start-pos 33
         hx   (+ y-start-pos (* x 48))
