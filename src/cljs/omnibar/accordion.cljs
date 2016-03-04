@@ -1,7 +1,7 @@
 (ns omnibar.accordion)
 
 (def major-3rd-note
-  {:name "major-3rd-note" :text "Major 3rd note" :notes [
+  {:name "major-3rd-note" :text "Major 3rd note" :row 0 :notes [
             {:id "accord-bass-maj-3rd-d-flat"
              :midi [49]        ;; the midi notes that are played when the button is pressed.
              :text "Db"        ;; what should appear on the bass button
@@ -28,7 +28,7 @@
             {:id "accord-bass-maj-3rd-double-sharp" :midi [38] :text "C##" :position [0 19] :class "r0 c19"}]})
 
 (def root-note
-  {:name "root-note" :text "Root note" :notes [
+  {:name "root-note" :text "Root note" :row 1 :notes [
             {:id "accord-bass-root-b-double-flat" :midi [45] :text "Bbb" :position [1 0] :class "r1 c0"}
             {:id "accord-bass-root-f-flat" :midi [40] :text "Fb" :position [1 1] :class "r1 c1"} ;; same as accord-bass-maj-3rd-e
             {:id "accord-bass-root-c-flat" :midi [35] :text "Cb" :position [1 2] :class "r1 c2"}
@@ -51,7 +51,7 @@
             {:id "accord-bass-root-a-sharp" :midi [34] :text "A#" :position [1 19] :class "r1 c19"}]})
 
 (def major-chord
-   {:name "major-chord" :text "Major chord" :notes [
+   {:name "major-chord" :text "Major chord" :row 2 :notes [
             {:id "accord-bass-maj-chord-d-flat" :midi [57 61 64] :text "Db" :position [2 0] :class "r2 c0"}
             {:id "accord-bass-maj-chord-a-flat" :midi [64 68 71] :text "Ab" :position [2 1] :class "r2 c1"}
             {:id "accord-bass-maj-chord-e-flat" :midi [59 63 66] :text "Eb" :position [2 2] :class "r2 c2"}
@@ -74,7 +74,7 @@
             {:id "accord-bass-maj-chord-c-double-sharp" :midi [70 74 77] :text "C##" :position [2 19] :class "r2 c19"}]})
 
 (def minor-chord
-   {:name "minor-chord" :text "Minor chord" :notes [
+   {:name "minor-chord" :text "Minor chord" :row 3 :notes [
             {:id "accord-bass-minor-chord-d-flat" :midi [57 60 64] :text "Db" :position [3 0] :class "r3 c0"}
             {:id "accord-bass-minor-chord-a-flat" :midi [64 67 71] :text "Ab" :position [3 1] :class "r3 c1"}
             {:id "accord-bass-minor-chord-e-flat" :midi [59 62 66] :text "Eb" :position [3 2] :class "r3 c2"}
@@ -97,7 +97,7 @@
             {:id "accord-bass-minor-chord-c-double-sharp" :midi [70 73 77] :text "C##" :position [3 19] :class "r3 c19"}]})
 
 (def dominant-7th-chord
-   {:name "dominant-7th-chord" :text "Dominant 7th chord" :notes [
+   {:name "dominant-7th-chord" :text "Dominant 7th chord" :row 4 :notes [
             {:id "accord-bass-dominant-7th-d-flat" :midi [57 61 67] :text "Db" :position [4 0] :class "r4 c0"}
             {:id "accord-bass-dominant-7th-a-flat" :midi [64 68 74] :text "Ab" :position [4 1] :class "r4 c1"}
             {:id "accord-bass-dominant-7th-e-flat" :midi [59 63 69] :text "Eb" :position [4 2] :class "r4 c2"}
@@ -120,7 +120,7 @@
             {:id "accord-bass-dominant-7th-c-double-sharp" :midi [70 74 80] :text "C##" :position [4 19] :class "r4 c19"}]})
 
 (def diminished-7th-chord
-   {:name "diminished-7th-chord" :text "Diminished 7th chord" :notes [
+   {:name "diminished-7th-chord" :text "Diminished 7th chord" :row 5 :notes [
             {:id "accord-bass-diminished-7th-d-flat" :midi [54 57 60] :text "Db" :position [5 0] :class "r5 c0"}
             {:id "accord-bass-diminished-7th-a-flat" :midi [61 64 67] :text "Ab" :position [5 1] :class "r5 c1"}
             {:id "accord-bass-diminished-7th-e-flat" :midi [56 59 62] :text "Eb" :position [5 2] :class "r5 c2"}

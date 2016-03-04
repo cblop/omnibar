@@ -210,18 +210,17 @@
             :on-mouse-up #(stop-chord! chord)
             :r "27" :stroke "black" :stroke-width "1" :fill "red"}] )
 
-
 (defn accordion-keyboard [shape note]
   (let [[x y] (:position note)
         title (:text note)
         freqs (map notes/midi->freq (:midi note))
-        y-start-pos 33
-        x-start-pos 33
-        hx   (+ y-start-pos (* x 48))
-        hy   (+ x-start-pos (* x 27) (* y 55))]
+        y-start-pos 0
+        x-start-pos 233
+        hx   (+ y-start-pos )
+        hy   (+ x-start-pos (* y 55))]
 
     [:g {:class "tile" :transform (str "translate(" hy "," hx ")")}
-     (if (= shape "circle") (circle freqs) (hexagon freqs))
+         (if (= shape "circle") (circle freqs) (hexagon freqs))
      [:text {:y "0.4em"
              :on-mouse-down #(play-chord! freqs)
              :on-mouse-up #(stop-chord! freqs)
@@ -230,7 +229,14 @@
       title]]))
 
 (defn accordion-group [shape note-group]
-  (map #(accordion-keyboard shape %) (:notes note-group)) )
+  (let [{notes :notes heading :text row :row} note-group
+        y-start-pos 43
+        x-start-pos 33
+        hy (+ x-start-pos (* row 27))
+        hx (+ y-start-pos (* row 48))]
+    [:g {:transform (str "translate(" hy "," hx ")")}
+     [:text heading]
+     (map #(accordion-keyboard shape %) notes)]))
 
 (defn svg-accordion [[h w] shape]
     [:svg {:width w
@@ -260,7 +266,7 @@
    [:div
     [svg-piano-keyboard2 150 2000]
 
-    [svg-accordion [320 1250] "hexagon"]
+    [svg-accordion [320 2000] "hexagon"]
     [svg-accordion [320 1250] "circle"]
     [svg-piano-keyboard 150 2000]
     ;;[svg-inkscape-hexagons 250 500]
