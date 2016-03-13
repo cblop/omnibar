@@ -210,6 +210,15 @@
             :on-mouse-up #(stop-chord! chord)
             :r "27" :stroke "black" :stroke-width "1" :fill "red"}] )
 
+(defn button [title [x y]]
+  [:g {:class "tile" :transform (str "translate(" x "," y ")")}
+   [:polygon {:transform "rotate(-30),scale(1.6,1.6)"
+              :fill "#57C2B2"
+              :stroke "#000"
+              :stroke-width "0.5" 
+              :points hexagon-points}]
+   [:text {:y "0.4em" :font-size "70%" :fill "#fff" :text-anchor "middle"} title] ])
+
 (defn accordion-keyboard [shape note]
   (let [[x y] (:position note)
         title (:text note)
@@ -230,7 +239,7 @@
 
 (defn accordion-group [shape note-group]
   (let [{notes :notes heading :text row :row} note-group
-        y-start-pos 43
+        y-start-pos 93
         x-start-pos 33
         hy (+ x-start-pos (* row 27))
         hx (+ y-start-pos (* row 48))]
@@ -245,6 +254,13 @@
            :viewBox (str "0 0 100% " h)
    :style {:outline "2px solid black"
            :background-color "#eee"}}
+     (button "Hold" [295 34])
+     (button ":saw" [405 34])
+     (button ":square" [460 34])
+     (button ":sine" [515 34])
+     (button ":triangle" [570 34])
+
+
      (map #(accordion-group shape %) accord/stradella-bass) ])
 
 ;; -------------------------
@@ -266,8 +282,8 @@
    [:div
     [svg-piano-keyboard2 150 2000]
 
-    [svg-accordion [320 2000] "hexagon"]
-    [svg-accordion [320 1250] "circle"]
+    [svg-accordion [370 2000] "hexagon"]
+    ;;[svg-accordion [320 1250] "circle"]
     [svg-piano-keyboard 150 2000]
     ;;[svg-inkscape-hexagons 250 500]
     ]])
