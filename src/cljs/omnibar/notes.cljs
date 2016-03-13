@@ -26,8 +26,6 @@
 (defn midi->note [midi-value]
    (nth piano-notes (- midi-value lowest-piano-midi)))
 
-(pprint (midi->note 69))
-
 (defn midi->freq [note-num]
   (let [expt-numerator (- note-num 49)
         expt-denominator 12
